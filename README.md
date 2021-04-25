@@ -1,4 +1,6 @@
 # GENERATOR3000
+A tool for generating words sequences. Run ```train.py```. It trains on files that are given in testdirn add writes model into a file. After this you can run ```generate.py```. It generates a word sequence and writes it into a file or stdout.
+
 ### Usage:
 ```
 git clone https://github.com/alexander-deb/generator3000.git

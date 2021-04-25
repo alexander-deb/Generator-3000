@@ -15,6 +15,9 @@ class Generator3000:
         pass
 
     def read_args(self):
+        '''
+        Function that reads command line arguments
+        '''
         parser = argparse.ArgumentParser()
         parser.add_argument(
             '--seed',
@@ -37,7 +40,7 @@ class Generator3000:
         parser.add_argument(
             '--output',
             type=str,
-            default=False,
+            default=sys.stdout,
             help='File which will be used to put generated sequence'
         )
 
@@ -48,21 +51,22 @@ class Generator3000:
         self.output = arguments.output
 
     def generate(self):
+        '''
+        Function that generates sequence of words from trained model
+        '''
         with shelve.open(self.model) as BIG_DICT:   
             self.seed = self.seed if self.seed != 'NULL_WRD' else choice(list(BIG_DICT.keys()))
             output = self.seed + " "
             while self.length > 0:
-                vals = BIG_DICT[self.seed].values()
-                self.seed = choices(list(BIG_DICT[self.seed].keys()), weights=[i / sum(list(vals)) for i in list(vals)])[0]
-                
-                output += self.seed + " "
-                self.length -= 1
-
-        if self.output:
-            with open(self.output, 'w') as file:
-                file.write(output)
-        else:
-            print(output)
+                try:
+                    vals = BIG_DICT[self.seed].values()
+                    self.seed = choices(list(BIG_DICT[self.seed].keys()), weights=[i / sum(list(vals)) for i in list(vals)])[0]
+                    
+                    output += self.seed + " "
+                    self.length -= 1
+                except Exception: 
+                    self.seed = choice(list(BIG_DICT.keys()))
+        print(output, file=self.output)
 
 def main():
     generator = Generator3000()

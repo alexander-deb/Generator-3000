@@ -5,7 +5,7 @@ import re
 import shelve
 import sys
 
-from collections import Counter
+from collections import Counter, defaultdict
                       
 
 class Train:
@@ -13,6 +13,9 @@ class Train:
         pass
 
     def read_args(self):
+        '''
+        Function that reads command line arguments
+        '''
         parser = argparse.ArgumentParser()
         parser.add_argument(
             '--input-dir',
@@ -40,11 +43,14 @@ class Train:
 
 
     def run_trainer(self):
+        '''
+        Function that trains model and writes it into a file.
+        '''
         #returns the names of the files in the directory data as a list
         list_of_files = os.listdir(self.input_dir)
 
         # opening database for saving model
-        BIG_DICT = {}
+        BIG_DICT = defaultdict(Counter)
         # reading text from all files
         for filename in list_of_files:
             with open(f"{self.input_dir}/{filename}", "r") as current_file:
@@ -56,11 +62,7 @@ class Train:
                     line = re.findall(r"\w+",line) # splitting line
                     # saving model
                     for i in range(len(line)-1):
-                        try:
-                            BIG_DICT[line[i]][line[i+1]] += 1
-                        except:
-                            BIG_DICT[line[i]] = Counter()
-                            BIG_DICT[line[i]][line[i+1]] += 1
+                        BIG_DICT[line[i]][line[i+1]] += 1
         with shelve.open(self.model) as file:
             for i in BIG_DICT.keys():
                 file[i] = BIG_DICT[i]
