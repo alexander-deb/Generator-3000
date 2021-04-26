@@ -6,7 +6,7 @@ import shelve
 import sys
 
 from collections import Counter, defaultdict
-                      
+
 
 class Train:
     def __init__(self):
@@ -30,10 +30,10 @@ class Train:
             help='Name for trained model file'
         )
         parser.add_argument(
-            '--lc', 
-            required=False, 
-            const=True, 
-            nargs='?', 
+            '--lc',
+            required=False,
+            const=True,
+            nargs='?',
             default=False,
             help='Makes lowercase text for model')
         arguments = parser.parse_args()
@@ -41,12 +41,11 @@ class Train:
         self.input_dir = arguments.input_dir
         self.model = arguments.model
 
-
     def run_trainer(self):
         '''
         Function that trains model and writes it into a file.
         '''
-        #returns the names of the files in the directory data as a list
+        # returns the names of the files in the directory data as a list
         list_of_files = os.listdir(self.input_dir)
 
         # opening database for saving model
@@ -58,8 +57,8 @@ class Train:
                 for line in lines:
                     if self.lc:
                         line = line.lower()
-                    line = re.sub(r"\d+", '', line) # remove all numbers
-                    line = re.findall(r"\w+",line) # splitting line
+                    line = re.sub(r"\d+", '', line)  # remove all numbers
+                    line = re.findall(r"\w+", line)  # splitting line
                     # saving model
                     for i in range(len(line)-1):
                         BIG_DICT[line[i]][line[i+1]] += 1
@@ -72,6 +71,7 @@ def main():
     model = Train()
     model.read_args()
     model.run_trainer()
+
 
 if __name__ == "__main__":
     main()

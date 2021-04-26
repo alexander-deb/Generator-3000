@@ -22,7 +22,7 @@ class Generator3000:
         parser.add_argument(
             '--seed',
             type=str,
-            default = 'NULL_WRD',
+            default='NULL_WRD',
             help='Beginning word'
         )
         parser.add_argument(
@@ -54,19 +54,26 @@ class Generator3000:
         '''
         Function that generates sequence of words from trained model
         '''
-        with shelve.open(self.model) as BIG_DICT:   
-            self.seed = self.seed if self.seed != 'NULL_WRD' else choice(list(BIG_DICT.keys()))
+        with shelve.open(self.model) as BIG_DICT:
+            self.seed = self.seed if self.seed != 'NULL_WRD' else choice(
+                list(BIG_DICT.keys()))
             output = self.seed + " "
             while self.length > 0:
                 try:
                     vals = BIG_DICT[self.seed].values()
-                    self.seed = choices(list(BIG_DICT[self.seed].keys()), weights=[i / sum(list(vals)) for i in list(vals)])[0]
-                    
+                    self.seed = choices(list(BIG_DICT[self.seed].keys()), weights=[
+                                        item / sum(list(vals)) for item in list(vals)])[0]
+
                     output += self.seed + " "
                     self.length -= 1
-                except Exception: 
+                except KeyError:
                     self.seed = choice(list(BIG_DICT.keys()))
-        print(output, file=self.output)
+        if not self.output == sys.stdout:
+            with open(self.output, "w") as file:
+                print(output, file=file)
+        else:
+            print(output, file=self.output)
+
 
 def main():
     generator = Generator3000()
