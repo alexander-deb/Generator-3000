@@ -46,7 +46,7 @@ class Generator3000:
 
         arguments = parser.parse_args()
         self.seed = arguments.seed
-        self.length = arguments.length
+        self.length = arguments.length - 1
         self.model = arguments.model
         self.output = arguments.output
 
@@ -72,7 +72,7 @@ class Generator3000:
             with open(self.output, "w") as file:
                 print(output, file=file)
         else:
-            print(output, file=self.output)
+            print(output)
 
 
 def main():
