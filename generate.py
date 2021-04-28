@@ -63,7 +63,6 @@ class Generator3000:
                     vals = BIG_DICT[self.seed].values()
                     self.seed = choices(list(BIG_DICT[self.seed].keys()), weights=[
                                         item / sum(list(vals)) for item in list(vals)])[0]
-
                     output += self.seed + " "
                     self.length -= 1
                 except KeyError:
