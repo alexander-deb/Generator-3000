@@ -1,11 +1,7 @@
 import argparse
-import getopt
-import os
-import re
 import shelve
 import sys
 
-from collections import OrderedDict
 from random import choices, choice
 
 
